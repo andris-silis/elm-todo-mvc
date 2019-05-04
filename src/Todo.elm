@@ -11,9 +11,9 @@ import String
 
 main : Program (Maybe Model) Model Msg
 main =
-    Browser.document
+    Browser.element
         { init = init
-        , view = \model -> { title = "Elm Todo MVC - Workshop", body = [ view model ] }
+        , view = view
         , update = updateWithStorage
         , subscriptions = \_ -> Sub.none
         }
@@ -28,8 +28,8 @@ emptyModel =
 
 
 init : Maybe Model -> ( Model, Cmd msg )
-init newModel =
-    ( Maybe.withDefault emptyModel newModel, Cmd.none )
+init storedModel =
+    ( Maybe.withDefault emptyModel storedModel, Cmd.none )
 
 
 port setStorage : Model -> Cmd msg
@@ -69,11 +69,11 @@ type Msg
 updateWithStorage : Msg -> Model -> ( Model, Cmd Msg )
 updateWithStorage msg model =
     let
-        ( newModel, cmds ) =
+        ( newModel, command ) =
             update msg model
     in
     ( newModel
-    , Cmd.batch [ setStorage newModel, cmds ]
+    , Cmd.batch [ setStorage newModel, command ]
     )
 
 
@@ -174,14 +174,18 @@ showEntry entry =
 showFooter model =
     let
         itemsLeftInTodo =
-            List.filter (\e -> not e.isCompleted) model.entries |> List.length
+            List.filter (\e -> not e.isCompleted) model.entries
+                |> List.length
+                |> String.fromInt
 
         itemsDone =
-            List.filter (\e -> e.isCompleted) model.entries |> List.length
+            List.filter (\e -> e.isCompleted) model.entries
+                |> List.length
+                |> String.fromInt
     in
     footer [ class "footer" ]
         [ span [ class "todo-count" ]
-            [ text (String.fromInt itemsLeftInTodo)
+            [ text itemsLeftInTodo
             , text " items left"
             ]
         , ul [ class "filters" ]
@@ -196,7 +200,7 @@ showFooter model =
                 ]
             ]
         , button [ class "clear-completed", onClick ClearCompleted ]
-            [ text ("Clear Completed (" ++ String.fromInt itemsDone ++ ")")
+            [ text ("Clear Completed (" ++ itemsDone ++ ")")
             ]
         ]
 
