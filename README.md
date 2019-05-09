@@ -1,8 +1,14 @@
 ## Prerequisites
 
-Please install latest version of node ( Anything above version 8 should do, but we all do like the latest stuff, right? :) ). I recommend using `nvm`: https://github.com/nvm-sh/nvm
+Please install latest version of node ( Anything above version 8 should do, but we all do like the latest stuff, right? :) ). I recommend using `nvm`:
 
-Install elm binaries and elm formatter with npm:
+https://github.com/nvm-sh/nvm
+
+If you are on windows, you might need to install the binary from Nodes website: 
+
+https://nodejs.org/en/
+
+Once node is installed, please add elm binaries and elm formatter with npm globally: 
 ```
 $ npm install -g elm
 $ npm install -g elm-format
