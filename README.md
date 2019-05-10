@@ -1,10 +1,16 @@
 ## Prerequisites
 
-Please install latest version of node ( Anything above version 8 should do, but we all do like the latest stuff, right? :) ). I recommend using `nvm`:
+Please install latest LTS version of Node. At the time of writing it is v10.15.3. App might not work with latest version. I recommend using `nvm`:
 
 https://github.com/nvm-sh/nvm
 
-If you are on windows, you might need to install the binary from Nodes website: 
+And install it using:
+
+```
+nvm install v10.15.3
+```
+
+If you are on Windows, you might need to se intaller from Nodes website: 
 
 https://nodejs.org/en/
 
