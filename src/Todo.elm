@@ -46,11 +46,11 @@ update msg model =
     case msg of
         Add ->
             let
-                newEntry = { description = "New entry" }
+                newEntry = { description = model.currentInputValue }
                 newEntries = List.append model.entries [ newEntry ]
             in
 
-            ( { model | entries = newEntries }, Cmd.none)
+            ( { model | entries = newEntries, currentInputValue = "" }, Cmd.none)
         UpdateCurrentInputValue newInputValue ->
             ( { model | currentInputValue = newInputValue }, Cmd.none)
 
@@ -71,6 +71,7 @@ showHeader model =
             , placeholder "What needs to be done"
             , value model.currentInputValue
             , onInput UpdateCurrentInputValue
+            , onEnter Add
         ] []
     ]
 
@@ -87,3 +88,14 @@ showEntry entry =
             label [] [ text entry.description ]
         ]
     ]
+
+onEnter: Msg -> Attribute Msg
+onEnter msg =
+    let
+        isEnter key =
+            if key == 13 then
+                Json.succeed msg
+            else
+                Json.fail "Not Enter"
+    in
+    on "keydown" (Json.andThen isEnter keyCode)
