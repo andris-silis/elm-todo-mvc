@@ -6,7 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.Keyed as Keyed
 import Json.Decode as Json
-import String
+-- import String
 
 
 main : Program (Maybe Model) Model Msg
@@ -20,16 +20,17 @@ main =
 
 
 type Msg
-    = All
+    = Increment
+    | Decrement
 
 
 init : Maybe Model -> ( Model, Cmd msg )
 init _ =
-    ( "", Cmd.none )
+    ( 0, Cmd.none )
 
 
 type alias Model =
-    String
+    Int
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
@@ -39,4 +40,4 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    text "Hello World"
+    text (String.fromInt model)
