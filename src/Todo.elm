@@ -35,9 +35,12 @@ type alias Model =
 
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        Increment -> (model + 1, Cmd.none)
+        Decrement -> (model - 1, Cmd.none)
 
 
 view : Model -> Html Msg
 view model =
+
     text (String.fromInt model)
