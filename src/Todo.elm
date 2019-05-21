@@ -25,7 +25,7 @@ type Msg
 
 
 emptyState: Model
-emptyState = { currentInputValue = "", entries = [ { description = "First task" }, { description = "2nd task" } ] }
+emptyState = { currentUid = 0, currentInputValue = "", entries = [ ] }
 
 init : Maybe Model -> ( Model, Cmd msg )
 init _ =
@@ -33,11 +33,13 @@ init _ =
 
 
 type alias Entry =
-    { description : String
+    { uid : Int
+    , description : String
     }
 type alias Model =
     { entries : List Entry
     , currentInputValue : String
+    , currentUid : Int
     }
 
 
@@ -46,11 +48,12 @@ update msg model =
     case msg of
         Add ->
             let
-                newEntry = { description = model.currentInputValue }
+                newEntry = { uid = model.currentUid + 1, description = model.currentInputValue }
                 newEntries = List.append model.entries [ newEntry ]
             in
 
-            ( { model | entries = newEntries, currentInputValue = "" }, Cmd.none)
+            ( { model | entries = newEntries, currentInputValue = "", currentUid = model.currentUid + 1 }, Cmd.none)
+
         UpdateCurrentInputValue newInputValue ->
             ( { model | currentInputValue = newInputValue }, Cmd.none)
 
@@ -85,7 +88,8 @@ showEntry: Entry -> Html Msg
 showEntry entry =
     li [] [
         div [class "view"] [
-            label [] [ text entry.description ]
+            input [ class "toggle", type_ "checkbox" ] []
+            , label [] [ text entry.description ]
         ]
     ]
 
