@@ -43,7 +43,12 @@ update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
         Add ->
-            ( { model | entries = List.append model.entries [{ description = "New entry" }] }, Cmd.none)
+            let
+                newEntry = { description = "New entry" }
+                newEntries = List.append model.entries [ newEntry ]
+            in
+
+            ( { model | entries = newEntries }, Cmd.none)
 
 
 view : Model -> Html Msg
