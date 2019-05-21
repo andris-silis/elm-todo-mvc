@@ -22,6 +22,7 @@ main =
 type Msg
     = Add
     | UpdateCurrentInputValue String
+    | Check Int
 
 
 emptyState: Model
@@ -35,6 +36,7 @@ init _ =
 type alias Entry =
     { uid : Int
     , description : String
+    , isCompleted : Bool
     }
 type alias Model =
     { entries : List Entry
@@ -48,7 +50,7 @@ update msg model =
     case msg of
         Add ->
             let
-                newEntry = { uid = model.currentUid + 1, description = model.currentInputValue }
+                newEntry = { uid = model.currentUid + 1, description = model.currentInputValue, isCompleted = False }
                 newEntries = List.append model.entries [ newEntry ]
             in
 
@@ -56,6 +58,19 @@ update msg model =
 
         UpdateCurrentInputValue newInputValue ->
             ( { model | currentInputValue = newInputValue }, Cmd.none)
+
+        Check uid ->
+            let
+                checkEntry : Entry -> Entry
+                checkEntry entry =
+                    if entry.uid == uid then
+                        { entry | isCompleted = not entry.isCompleted }
+                    else
+                        entry
+
+                newEntries = List.map checkEntry model.entries
+            in
+            ( { model | entries = newEntries }, Cmd.none)
 
 
 view : Model -> Html Msg
@@ -86,9 +101,14 @@ showEntries model =
 
 showEntry: Entry -> Html Msg
 showEntry entry =
-    li [] [
+    li [ classList [ ( "completed", entry.isCompleted ) ] ] [
         div [class "view"] [
-            input [ class "toggle", type_ "checkbox" ] []
+            input [
+                class "toggle"
+                , type_ "checkbox"
+                , checked entry.isCompleted
+                , onClick (Check entry.uid)
+            ] []
             , label [] [ text entry.description ]
         ]
     ]
