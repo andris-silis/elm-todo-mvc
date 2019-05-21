@@ -21,10 +21,11 @@ main =
 
 type Msg
     = Add
+    | UpdateCurrentInputValue String
 
 
 emptyState: Model
-emptyState = { currentInputValue = "Hello", entries = [ { description = "First task" }, { description = "2nd task" } ] }
+emptyState = { currentInputValue = "", entries = [ { description = "First task" }, { description = "2nd task" } ] }
 
 init : Maybe Model -> ( Model, Cmd msg )
 init _ =
@@ -50,6 +51,8 @@ update msg model =
             in
 
             ( { model | entries = newEntries }, Cmd.none)
+        UpdateCurrentInputValue newInputValue ->
+            ( { model | currentInputValue = newInputValue }, Cmd.none)
 
 
 view : Model -> Html Msg
@@ -63,7 +66,12 @@ showHeader: Model -> Html Msg
 showHeader model =
     header [ class "header" ] [
         h1 [] [ text "todos" ]
-        , input [ class "new-todo", placeholder "What needs to be done", value model.currentInputValue ] []
+        , input [
+            class "new-todo"
+            , placeholder "What needs to be done"
+            , value model.currentInputValue
+            , onInput UpdateCurrentInputValue
+        ] []
     ]
 
 showEntries: Model -> Html Msg
