@@ -23,6 +23,7 @@ type Msg
     = Add
     | UpdateCurrentInputValue String
     | Check Int
+    | Delete Int
 
 
 emptyState: Model
@@ -72,6 +73,12 @@ update msg model =
             in
             ( { model | entries = newEntries }, Cmd.none)
 
+        Delete uid ->
+            let
+                filterEntry entry = entry.uid /= uid
+            in
+            ( { model | entries = List.filter filterEntry model.entries }, Cmd.none)
+
 
 view : Model -> Html Msg
 view model =
@@ -110,6 +117,7 @@ showEntry entry =
                 , onClick (Check entry.uid)
             ] []
             , label [] [ text entry.description ]
+            , button [ class "destroy", onClick (Delete entry.uid) ] []
         ]
     ]
 
