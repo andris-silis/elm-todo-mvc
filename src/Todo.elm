@@ -1,4 +1,4 @@
-module Todo exposing (Model, Msg(..), init, main, update, view)
+port module Todo exposing (Model, Msg(..), init, main, update, view)
 
 import Browser
 import Html exposing (..)
@@ -14,7 +14,7 @@ main =
     Browser.element
         { init = init
         , view = view
-        , update = update
+        , update = updateWithStorage
         , subscriptions = \_ -> Sub.none
         }
 
@@ -30,9 +30,10 @@ emptyState: Model
 emptyState = { currentUid = 0, currentInputValue = "", entries = [ ] }
 
 init : Maybe Model -> ( Model, Cmd msg )
-init _ =
-    ( emptyState , Cmd.none )
+init initialModel =
+    ( Maybe.withDefault emptyState initialModel, Cmd.none )
 
+port setStorage : Model -> Cmd msg
 
 type alias Entry =
     { uid : Int
@@ -45,6 +46,11 @@ type alias Model =
     , currentUid : Int
     }
 
+updateWithStorage : Msg -> Model -> ( Model, Cmd msg )
+updateWithStorage msg model =
+    let (newModel, command) = update msg model
+    in
+    ( newModel, Cmd.batch [ setStorage newModel, command ] )
 
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
