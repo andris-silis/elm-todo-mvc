@@ -31,6 +31,13 @@ Please install VS Code: https://code.visualstudio.com/
 
 And following extension for Elm: https://github.com/Krzysztof-Cieslak/vscode-elm
 
+Enable format on save for elm
+```
+"[elm]": {
+    "editor.formatOnSave": true
+},
+```
+
 While it is not strictly necessary to install VS Code and you can use some other editor, please make sure that it has support for elm-format and does reformatting on save. It will help a lot. 
 
 ## App installation
