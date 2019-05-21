@@ -24,7 +24,7 @@ type Msg
 
 
 emptyState: Model
-emptyState = { entries = [ { description = "First task" }, { description = "2nd task" } ] }
+emptyState = { currentInputValue = "Hello", entries = [ { description = "First task" }, { description = "2nd task" } ] }
 
 init : Maybe Model -> ( Model, Cmd msg )
 init _ =
@@ -36,6 +36,7 @@ type alias Entry =
     }
 type alias Model =
     { entries : List Entry
+    , currentInputValue : String
     }
 
 
@@ -55,7 +56,14 @@ view : Model -> Html Msg
 view model =
     div [ class "todomvc-wrapper" ] [
         button  [ onClick Add ] [ text "Add new entry" ]
-        , section [ class "todoapp" ] [showEntries model]
+        , section [ class "todoapp" ] [ showHeader model, showEntries model]
+    ]
+
+showHeader: Model -> Html Msg
+showHeader model =
+    header [ class "header" ] [
+        h1 [] [ text "todos" ]
+        , input [ class "new-todo", placeholder "What needs to be done", value model.currentInputValue ] []
     ]
 
 showEntries: Model -> Html Msg
