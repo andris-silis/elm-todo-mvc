@@ -20,8 +20,7 @@ main =
 
 
 type Msg
-    = Increment
-    | Decrement
+    = Add
 
 
 emptyState: Model
@@ -42,13 +41,16 @@ type alias Model =
 
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
-    (model, Cmd.none)
+    case msg of
+        Add ->
+            ( { model | entries = List.append model.entries [{ description = "New entry" }] }, Cmd.none)
 
 
 view : Model -> Html Msg
 view model =
     div [ class "todomvc-wrapper" ] [
-        section [ class "todoapp" ] [showEntries model]
+        button  [ onClick Add ] [ text "Add new entry" ]
+        , section [ class "todoapp" ] [showEntries model]
     ]
 
 showEntries: Model -> Html Msg
