@@ -24,26 +24,43 @@ type Msg
     | Decrement
 
 
+emptyState: Model
+emptyState = { entries = [ { description = "First task" }, { description = "2nd task" } ] }
+
 init : Maybe Model -> ( Model, Cmd msg )
 init _ =
-    ( 0, Cmd.none )
+    ( emptyState , Cmd.none )
 
 
+type alias Entry =
+    { description : String
+    }
 type alias Model =
-    Int
+    { entries : List Entry
+    }
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
-    case msg of
-        Increment -> (model + 1, Cmd.none)
-        Decrement -> (model - 1, Cmd.none)
+    (model, Cmd.none)
 
 
 view : Model -> Html Msg
 view model =
-    div [] [
-        button [onClick Increment] [ text "Increment" ]
-        , div [] [text (String.fromInt model)]
-        , button [onClick Decrement] [ text "Decrement" ]
+    div [ class "todomvc-wrapper" ] [
+        section [ class "todoapp" ] [showEntries model]
+    ]
+
+showEntries: Model -> Html Msg
+showEntries model =
+    section [ class "main" ] [
+        ul [ class "todo-list"] (List.map showEntry model.entries)
+    ]
+
+showEntry: Entry -> Html Msg
+showEntry entry =
+    li [] [
+        div [class "view"] [
+            label [] [ text entry.description ]
+        ]
     ]
