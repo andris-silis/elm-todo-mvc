@@ -6,7 +6,6 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.Keyed as Keyed
 import Json.Decode as Json
--- import String
 
 
 main : Program (Maybe Model) Model Msg
